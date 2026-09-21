@@ -1,0 +1,9 @@
+# Generierte PDFs werden nicht versioniert, sondern per CI gebaut.
+# Wer die PDFs doch mitversionieren möchte, kann diese Zeile entfernen.
+dist/*.pdf
+dist/*.html
+
+# Sonstiges
+.DS_Store
+*.aux
+*.log

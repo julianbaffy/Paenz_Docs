@@ -1,0 +1,58 @@
+name: PDFs bauen
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "templates/**"
+      - "Makefile"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "templates/**"
+      - "Makefile"
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # volle Historie, damit "git describe" Tags findet
+
+      - name: Pandoc installieren
+        uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: "3.1.3"
+
+      - name: WeasyPrint installieren
+        run: pip install --break-system-packages weasyprint
+
+      # Nur nötig, wenn ENGINE=latex gebaut werden soll:
+      # - name: LaTeX installieren
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y texlive-xetex texlive-fonts-recommended \
+      #       texlive-latex-extra texlive-fonts-extra fonts-noto
+
+      - name: PDFs bauen (WeasyPrint)
+        run: make
+
+      - name: PDFs als Artefakt hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: verein-dokumente-pdfs
+          path: dist/*.pdf
+
+      # Bei einem GitHub-Release werden die PDFs zusätzlich als
+      # Release-Assets angehängt, z. B. wenn ein Vorstandsbeschluss
+      # per Tag/Release markiert wird.
+      - name: PDFs an Release anhängen
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.pdf

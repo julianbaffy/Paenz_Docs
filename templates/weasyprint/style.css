@@ -1,0 +1,152 @@
+/* Gestaltung des PDFs. Farben, Schrift, Kopf-/Fußzeile hier anpassen. */
+
+@page {
+    size: A4;
+    margin: 2.5cm 2.2cm 2.8cm 2.2cm;
+
+    @top-center {
+        content: "Muster e. V. — " string(doctitle);
+        font-size: 8pt;
+        color: #6b7280;
+        border-bottom: 0.5pt solid #d1d5db;
+        padding-bottom: 4pt;
+    }
+    @bottom-left {
+        content: "Version " string(docversion);
+        font-size: 8pt;
+        color: #6b7280;
+    }
+    @bottom-right {
+        content: "Seite " counter(page) " von " counter(pages);
+        font-size: 8pt;
+        color: #6b7280;
+    }
+}
+
+/* Titelseite ohne Kopf-/Fußzeile, mit eigenem Seitenumbruch */
+@page :first {
+    @top-center { content: none; }
+    @bottom-left { content: none; }
+    @bottom-right { content: none; }
+}
+
+:root {
+    --color-primary: #1f4e3d;   /* Vereinsfarbe: hier anpassen */
+    --color-text: #1f2933;
+    --color-muted: #6b7280;
+}
+
+body {
+    font-family: "Noto Sans", "DejaVu Sans", sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    color: var(--color-text);
+}
+
+/* --- Titelseite --- */
+.titlepage {
+    page: first;
+    break-after: page;
+    padding-top: 6cm;
+    text-align: center;
+}
+.titlepage-logo {
+    font-size: 12pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 3cm;
+}
+.titlepage-title {
+    font-size: 28pt;
+    color: var(--color-primary);
+    margin: 0;
+    string-set: doctitle content();
+}
+.titlepage-subtitle {
+    font-size: 14pt;
+    color: var(--color-muted);
+    margin-top: 0.3cm;
+}
+.titlepage-meta {
+    margin-top: 2cm;
+    font-size: 10pt;
+    color: var(--color-muted);
+}
+.titlepage-meta div { margin: 0.15cm 0; }
+
+/* Version für die Fußzeile verfügbar machen */
+.meta-version { string-set: docversion content(); }
+
+/* --- Inhaltsverzeichnis --- */
+.toc {
+    break-after: page;
+}
+.toc h2 {
+    color: var(--color-primary);
+    font-size: 14pt;
+}
+.toc ul {
+    list-style: none;
+    padding-left: 0;
+}
+.toc ul ul { padding-left: 1em; }
+.toc a {
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+/* --- Inhalt --- */
+.content h1 {
+    color: var(--color-primary);
+    font-size: 15pt;
+    border-bottom: 1pt solid var(--color-primary);
+    padding-bottom: 3pt;
+    margin-top: 1.2cm;
+    break-after: avoid;
+}
+.content h2 {
+    color: var(--color-primary);
+    font-size: 12.5pt;
+    margin-top: 0.8cm;
+    break-after: avoid;
+}
+.content h3 {
+    font-size: 11pt;
+    break-after: avoid;
+}
+.content p { text-align: justify; orphans: 3; widows: 3; }
+.content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 0.5cm 0;
+}
+.content th, .content td {
+    border: 0.5pt solid #d1d5db;
+    padding: 4pt 6pt;
+    text-align: left;
+}
+.content th {
+    background: #f3f4f6;
+    color: var(--color-primary);
+}
+.content hr {
+    border: none;
+    border-top: 0.5pt solid #d1d5db;
+    margin: 1cm 0;
+}
+
+/* --- "Entwurf"-Wasserzeichen: Klasse "is-draft" am <body> ergänzen,
+       z. B. per Pandoc-Metadatum "status: Entwurf" + kleines Skript,
+       oder einfach hier fest aktivieren/deaktivieren --- */
+body.is-draft .content::before {
+    content: "ENTWURF";
+    position: fixed;
+    top: 45%;
+    left: 10%;
+    font-size: 90pt;
+    color: rgba(200, 0, 0, 0.08);
+    transform: rotate(-35deg);
+    z-index: -1;
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="$lang$">
+<head>
+<meta charset="utf-8">
+<title>$title$</title>
+$for(css)$
+<link rel="stylesheet" href="$css$">
+$endfor$
+</head>
+<body>
+
+<div class="titlepage">
+  <div class="titlepage-logo">Muster e. V.</div>
+  <h1 class="titlepage-title">$title$</h1>
+  $if(subtitle)$<div class="titlepage-subtitle">$subtitle$</div>$endif$
+  <div class="titlepage-meta">
+    $if(status)$<div>Status: $status$</div>$endif$
+    $if(version)$<div>Version: <span class="meta-version">$version$</span> ($git_version$)</div>$endif$
+    $if(date)$<div>Stand: $date$</div>$endif$
+  </div>
+</div>
+
+$if(table-of-contents)$
+<div class="toc">
+<h2>Inhaltsverzeichnis</h2>
+$table-of-contents$
+</div>
+$endif$
+
+<div class="content">
+$body$
+</div>
+
+</body>
+</html>
