@@ -8,6 +8,12 @@
 
 ENGINE ?= weasyprint
 
+BREW_PREFIX := $(shell brew --prefix 2>/dev/null)
+WEASYPRINT_ENV :=
+ifneq ($(wildcard $(BREW_PREFIX)/lib/libgobject-2.0*.dylib),)
+WEASYPRINT_ENV = DYLD_LIBRARY_PATH=$(BREW_PREFIX)/lib
+endif
+
 DOCS := satzung datenschutzkonzept paedagogisches-konzept
 PDFS := $(addprefix dist/,$(addsuffix .pdf,$(DOCS)))
 
@@ -38,7 +44,7 @@ dist/%.pdf: docs/%.md templates/weasyprint/template.html templates/weasyprint/st
 		--metadata build_date="$(BUILD_DATE)" \
 		--table-of-contents --toc-depth=2 \
 		-o dist/$*.html
-	weasyprint dist/$*.html "$@" --base-url .
+	$(WEASYPRINT_ENV) python3 -m weasyprint dist/$*.html "$@" --base-url .
 	@rm -f dist/$*.html
 
 endif

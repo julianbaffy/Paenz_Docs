@@ -1,14 +1,27 @@
 /* Gestaltung des PDFs. Farben, Schrift, Kopf-/Fußzeile hier anpassen. */
 
+/* Seriöses Schriftpaar: Source Serif 4 (Überschriften) + Source Sans 3 (Fließtext) */
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600;700&display=swap");
+
 @page {
     size: A4;
-    margin: 2.5cm 2.2cm 2.8cm 2.2cm;
+    /* deutlich schmaler als zuvor */
+    margin: 1.8cm 1.6cm 2cm 1.6cm;
 
     @top-center {
-        content: "Muster e. V. — " string(doctitle);
+        content: "Paenz e. V. — " string(doctitle);
         font-size: 8pt;
         color: #6b7280;
         border-bottom: 0.5pt solid #d1d5db;
+        padding-bottom: 4pt;
+    }
+    /* Quadratisches Logo oben rechts auf normalen Seiten, sobald
+       templates/logo_square.png existiert. Fehlt die Datei, meldet
+       WeasyPrint nur eine Warnung und baut das PDF trotzdem. */
+    @top-right {
+        content: url(templates/logo_square.png);
+        width: 0.9cm;
+        vertical-align: middle;
         padding-bottom: 4pt;
     }
     @bottom-left {
@@ -26,63 +39,77 @@
 /* Titelseite ohne Kopf-/Fußzeile, mit eigenem Seitenumbruch */
 @page :first {
     @top-center { content: none; }
+    @top-right { content: none; }
     @bottom-left { content: none; }
     @bottom-right { content: none; }
 }
 
 :root {
-    --color-primary: #1f4e3d;   /* Vereinsfarbe: hier anpassen */
-    --color-text: #1f2933;
-    --color-muted: #6b7280;
+    --color-primary: #2f5e4e;   /* Vereinsfarbe, aus custom.css (--kj-accent) übernommen */
+    --color-text: #2b2b2b;      /* aus custom.css (--kj-text) */
+    --color-muted: #5c5c5c;     /* aus custom.css (--kj-muted) */
+    --font-display: "Source Serif 4", Georgia, serif;
+    --font-body: "Source Sans 3", "DejaVu Sans", Arial, sans-serif;
 }
 
 body {
-    font-family: "Noto Sans", "DejaVu Sans", sans-serif;
+    font-family: var(--font-body);
     font-size: 10.5pt;
     line-height: 1.5;
     color: var(--color-text);
 }
 
-/* --- Titelseite --- */
+/* --- Titelseite (Logo, schlichter Titel, "Stand" unten links) --- */
 .titlepage {
     page: first;
     break-after: page;
-    padding-top: 6cm;
+    position: relative;
+    /* A4-Höhe (29.7cm) abzüglich der Seitenränder dieser Seite oben/unten */
+    min-height: 25.9cm;
+}
+.titlepage-brand {
+    padding-top: 3.5cm;
     text-align: center;
 }
-.titlepage-logo {
-    font-size: 12pt;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-primary);
-    margin-bottom: 3cm;
+.titlepage-logo-img {
+    display: block;
+    margin: 0 auto 2.5cm;
+    max-width: 4.5cm;
+    max-height: 4.5cm;
 }
 .titlepage-title {
-    font-size: 28pt;
-    color: var(--color-primary);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 24pt;
+    color: var(--color-text);
     margin: 0;
     string-set: doctitle content();
 }
-.titlepage-subtitle {
-    font-size: 14pt;
-    color: var(--color-muted);
-    margin-top: 0.3cm;
-}
-.titlepage-meta {
-    margin-top: 2cm;
-    font-size: 10pt;
-    color: var(--color-muted);
-}
-.titlepage-meta div { margin: 0.15cm 0; }
 
-/* Version für die Fußzeile verfügbar machen */
-.meta-version { string-set: docversion content(); }
+/* Datum unten links auf der Titelseite ("Stand ...") */
+.titlepage-date {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-size: 9pt;
+    color: var(--color-muted);
+}
+
+/* Version bleibt für die Fußzeile der Folgeseiten verfügbar, ohne auf der
+   Titelseite sichtbar zu sein. */
+.meta-version-hidden {
+    string-set: docversion content();
+    position: absolute;
+    visibility: hidden;
+}
 
 /* --- Inhaltsverzeichnis --- */
 .toc {
     break-after: page;
 }
 .toc h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
     color: var(--color-primary);
     font-size: 14pt;
 }
@@ -98,6 +125,8 @@ body {
 
 /* --- Inhalt --- */
 .content h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
     color: var(--color-primary);
     font-size: 15pt;
     border-bottom: 1pt solid var(--color-primary);
@@ -106,12 +135,16 @@ body {
     break-after: avoid;
 }
 .content h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
     color: var(--color-primary);
     font-size: 12.5pt;
     margin-top: 0.8cm;
     break-after: avoid;
 }
 .content h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
     font-size: 11pt;
     break-after: avoid;
 }

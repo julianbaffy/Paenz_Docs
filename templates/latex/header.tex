@@ -6,43 +6,76 @@
 \usepackage[most]{tcolorbox}
 \usepackage{xcolor}
 \usepackage{fontspec}
+\usepackage{graphicx}
 
-% Vereinsfarbe: hier anpassen
-\definecolor{vereinfarbe}{HTML}{1F4E3D}
+% --- Seitenränder: deutlich schmaler als das LaTeX-Standardlayout ---
+\usepackage[top=2cm, bottom=2.2cm, left=3cm, right=2.5cm]{geometry}
 
-\setmainfont{Noto Sans}
+% Vereinsfarbe: übernommen aus custom.css (--kj-accent)
+\definecolor{vereinfarbe}{HTML}{2F5E4E}
 
-% --- Überschriften einfärben ---
-\usepackage{sectsty}
-\sectionfont{\color{vereinfarbe}}
-\subsectionfont{\color{vereinfarbe}}
+\setmainfont{Arial}
+
+
+% Auszeichnungsschrift für Überschriften: Source Serif 4 — seriöse Antiqua,
+% passend zu offiziellen Vereinsdokumenten. Fallback Georgia.
+\IfFontExistsTF{Source Serif 4}{
+  \newfontfamily\displayfont{Source Serif 4}
+}{
+  \newfontfamily\displayfont{Georgia}
+}
+
+% --- Überschriften: Auszeichnungsschrift, Vereinsfarbe, Trennlinie darunter ---
+% (ersetzt sectsty vollständig, da sectsty und titlesec sich in die Quere
+%  kommen können, wenn beide dieselben Sectioning-Befehle patchen)
+\usepackage{titlesec}
+\titleformat{\section}
+  {\displayfont\color{vereinfarbe}\Large\bfseries}
+  {}{0pt}{}
+  [{\color{vereinfarbe}\vspace{0.2cm}\titlerule[0.8pt]}]
+\titlespacing*{\section}{0pt}{1.2cm}{0.6cm}
+
+
+\titleformat{\subsection}
+  {\displayfont\color{vereinfarbe}\large\bfseries}
+  {}{0pt}{}
+\titlespacing*{\subsection}{0pt}{0.8cm}{0.3cm}
 
 % --- Kopf- und Fußzeile ---
 \pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\headrulewidth}{0.4pt}
-\fancyhead[C]{\small\color{gray} Muster e.\,V. --- \thetitle}
+% Quadratisches Logo oben rechts auf normalen Seiten, sobald die Datei
+% templates/logo_square.png existiert (bis dahin bleibt die Ecke leer).
+\fancyhead[R]{\IfFileExists{templates/logo_square.png}{\includegraphics[height=0.9cm]{templates/logo_square.png}}{}}
 \fancyfoot[L]{\small\color{gray} Version \docversion\ (\gitversion)}
 \fancyfoot[R]{\small\color{gray} Seite \thepage\ von \pageref{LastPage}}
 \usepackage{lastpage}
 
+\setlength{\headsep}{1.5cm}
 \fancypagestyle{plain}{%
   \fancyhf{}
   \renewcommand{\headrulewidth}{0pt}
 }
 
 % --- Titelseite ---
+% Logo: wird automatisch eingebunden, sobald templates/logo.png existiert.
+% Bis dahin greift der Text-Fallback "Paenz e. V.".
 \pretitle{%
   \begin{center}
-  \vspace*{3cm}
-  {\large\color{vereinfarbe}\MakeUppercase{Muster e.\,V.}}\\[3cm]
-  \Huge\color{vereinfarbe}
+  \vspace*{2cm}
+  \IfFileExists{templates/logo.png}{%
+    \includegraphics[width=4.5cm]{templates/logo.png}\par
+  }{%
+    {\large\color{vereinfarbe}\displayfont\MakeUppercase{Paenz e.\,V.}}\par
+  }
+  \vspace{2.5cm}
+  \color{black}\bfseries\LARGE
 }
-\posttitle{\par\end{center}\vspace{0.5cm}}
+\posttitle{\par\end{center}\vspace{0.3cm}}
 \preauthor{\begin{center}\large\color{gray}}
 \postauthor{\par\end{center}}
-\predate{\begin{center}\large\color{gray}}
-\postdate{\par\end{center}\vspace{3cm}\thispagestyle{empty}\newpage}
+% Datum unten auf der Titelseite, per \vfill an den Seitenfuß geschoben.
+\predate{\vfill\begin{center}\small\color{gray}Stand\ }
+\postdate{\par\end{center}\vspace{1.2cm}\thispagestyle{empty}\newpage}
 
 % --- Entwurf-Wasserzeichen: bei Bedarf einkommentieren ---
 % \usepackage[firstpage=false,color=red,scale=1,angle=45,opacity=0.08]{draftwatermark}
