@@ -94,3 +94,8 @@ einkommentieren.
 einreichen. GitHub zeigt dabei den reinen Text-Diff der Markdown-Datei an;
 Vorstand oder Mitglieder können Zeilen direkt kommentieren, bevor der
 Vorschlag in `main` übernommen wird.
+
+# To Do
+
+- Eigenschaft für Titelseite boolean
+- 
