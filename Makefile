@@ -27,7 +27,7 @@ dist/%.pdf: docs/%.md templates/weasyprint/template.html templates/weasyprint/st
 		--css templates/weasyprint/style.css \
 		--metadata git_version="$(GIT_VERSION)" \
 		--metadata build_date="$(BUILD_DATE)" \
-		--table-of-contents --toc-depth=2 \
+		$(if $(filter true,$(DOC_TOC)),--table-of-contents --toc-depth=3) \
 		-o dist/$*.html
 	weasyprint dist/$*.html "$@" --base-url .
 	@rm -f dist/$*.html
@@ -49,7 +49,7 @@ dist/%.pdf: docs/%.md templates/latex/header.tex
 		--pdf-engine=xelatex \
 		--include-in-header dist/$*-vars.tex \
 		--include-in-header templates/latex/header.tex \
-		--table-of-contents --toc-depth=2 \
+		$(if $(filter true,$(DOC_TOC)),--table-of-contents --toc-depth=3) \
 		-o "$@"
 	@rm -f dist/$*-vars.tex
 
