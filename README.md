@@ -44,12 +44,13 @@ lang: de
 toc: true
 frontpage: true
 draft: false
+breadcrumps: false
 ---
 ```
 
 Titelseite (wenn title: true), Status (z. B. „Entwurf"), Versionsnummer und Datum, Inhaltsverzeichnis (wenn toc: true),
 durchnummerierte Überschriften bzw. Paragraphen, Kopfzeile mit
-Dokumenttitel, Fußzeile mit Versionsnummer und Seitenzahl.
+breadcrumps der sections und Logo, Fußzeile mit Versionsnummer und Seitenzahl.
 
 Farben und Schrift ändern:
 `templates/latex/header.tex` (`\definecolor{vereinfarbe}{...}`).
