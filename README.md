@@ -24,13 +24,14 @@ dist/                        generierte PDFs (nicht versioniert, siehe .gitignor
 ## PDFs bauen
 
 ```bash
-make                   # alle Dokumente, WeasyPrint (Standard)
-make ENGINE=latex      # alle Dokumente, LaTeX/XeLaTeX
+make                   # alle Dokumente, LaTex (Standard)
+make ENGINE=latex
+make ENGINE=weasyprint # alle Dokumente, Weasyprint
 make satzung           # nur die Satzung
-make clean             # dist/ leeren
+make clean             # dist/ löschen (wird bei make neu erstellt)
 ```
 
-Die PDFs landen in `dist/`.
+Die PDFs landen in `dist/`. Unterordner in `/docs` werden auch in `/dist`erstellt. 
 
 ## Welcher Weg für was?
 
