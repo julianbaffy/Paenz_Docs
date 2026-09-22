@@ -6,6 +6,8 @@ version: "0.1.0"
 date: "2026-09-21"
 lang: de
 toc: true
+frontpage: true
+draft: true
 ---
 
 # § 1 Name, Sitz, Geschäftsjahr

@@ -77,6 +77,6 @@
 \predate{\vfill\begin{center}\small\color{gray}Stand\ }
 \postdate{\par\end{center}\vspace{1.2cm}\thispagestyle{empty}\newpage}
 
-% --- Entwurf-Wasserzeichen: bei Bedarf einkommentieren ---
-% \usepackage[firstpage=false,color=red,scale=1,angle=45,opacity=0.08]{draftwatermark}
-% \SetWatermarkText{ENTWURF}
+\apptocmd{\tableofcontents}{\clearpage}{}{}
+
+
