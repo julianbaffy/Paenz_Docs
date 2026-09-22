@@ -8,6 +8,7 @@ lang: de
 toc: true
 frontpage: true
 draft: true
+breadcrumps: false
 ---
 
 # § 1 Name, Sitz, Geschäftsjahr
