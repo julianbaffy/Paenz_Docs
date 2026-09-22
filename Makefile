@@ -16,6 +16,8 @@ $(DOCS): %: dist/%.pdf
 DOC_VERSION = $(shell awk -F': *' '/^version:/{gsub(/"/,"",$$2); print $$2; exit}' docs/$*.md)
 DOC_DRAFT = $(shell awk -F': *' '/^draft:/{gsub(/"/,"",$$2); print $$2; exit}' docs/$*.md)
 DOC_FRONTPAGE = $(shell awk -F': *' '/^frontpage:/{print $$2; exit}' docs/$*.md)
+DOC_BREADCRUMPS = $(shell awk -F': *' '/^breadcrumps:/{gsub(/"/,"",$$2); print $$2; found=1} END{if (!found) print "true"}' docs/$*.md)
+
 
 dist/%.pdf: docs/%.md templates/latex/header.tex
 	mkdir -p $(dir $@)
@@ -23,6 +25,11 @@ dist/%.pdf: docs/%.md templates/latex/header.tex
 		"$(GIT_VERSION)" "$(DOC_VERSION)" \
 		"$(if $(filter false,$(DOC_FRONTPAGE)),\renewcommand{\maketitle}{})" \
 		> dist/$*-vars.tex
+	@if [ "$(DOC_BREADCRUMPS)" = "false" ]; then \
+		printf '\\newif\\ifshowbreadcrumbs\\showbreadcrumbsfalse\n' >> dist/$*-vars.tex; \
+	else \
+		printf '\\newif\\ifshowbreadcrumbs\\showbreadcrumbstrue\n' >> dist/$*-vars.tex; \
+	fi
 	@if [ "$(DOC_DRAFT)" = "true" ]; then \
 		printf '\\usepackage[firstpage=false,color=red!20,scale=1,angle=45]{draftwatermark}\n\\SetWatermarkText{ENTWURF}\n' >> dist/$*-vars.tex; \
 	fi

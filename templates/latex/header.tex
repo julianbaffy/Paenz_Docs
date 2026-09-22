@@ -14,14 +14,18 @@
 \newcommand{\headersection}{}
 \newcommand{\headersubsection}{}
 
-\renewcommand{\sectionmark}[1]{%
-  \renewcommand{\headersection}{#1}%
-  \renewcommand{\headersubsection}{}%
-}
-
-\renewcommand{\subsectionmark}[1]{%
-  \renewcommand{\headersubsection}{\hspace{0.6em}--\hspace{0.6em}#1}%
-}
+\ifshowbreadcrumbs
+  \renewcommand{\sectionmark}[1]{%
+    \renewcommand{\headersection}{#1}%
+    \renewcommand{\headersubsection}{}%
+  }
+  \renewcommand{\subsectionmark}[1]{%
+    \renewcommand{\headersubsection}{\hspace{0.6em}--\hspace{0.6em}#1}%
+  }
+\else
+  \renewcommand{\sectionmark}[1]{}
+  \renewcommand{\subsectionmark}[1]{}
+\fi
 
 % Vereinsfarbe: übernommen aus custom.css (--kj-accent)
 \definecolor{vereinfarbe}{HTML}{2F5E4E}

@@ -94,3 +94,4 @@ Vorschlag in `main` übernommen wird.
 
 - Anlagen zu Datenschutzkonzept mit Eingabefeldern?
 - Aktuelle Dateien als MD einpflegen. Bisher nur Plazhalter, außer Pädagorisches Konzept.
+- neues Template für kurze Dateien (Anlagen)?
